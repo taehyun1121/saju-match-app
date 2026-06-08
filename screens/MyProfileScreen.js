@@ -122,8 +122,9 @@ export default function MyProfileScreen({ navigation, route }) {
     { hanja: '-', hangul: '-' },
   ];
 
-  // 오행 분포 (백엔드 응답에 ohaeng 객체가 있을 경우)
-  const ohaeng = sajuResult?.ohaeng || {};
+  // 오행 분포 — API ohaeng.counts: { 木, 火, 土, 金, 水 }
+  const ohaeng = sajuResult?.ohaeng?.counts || sajuResult?.ohaeng || {};
+  const lacking = sajuResult?.ohaeng?.lacking || [];
   const hasOhaeng = Object.keys(ohaeng).length > 0;
 
   return (
@@ -170,6 +171,22 @@ export default function MyProfileScreen({ navigation, route }) {
                 <Text style={s.sectionLabel}>오행 분포 (五行)</Text>
                 <View style={s.card}>
                   <OhaengBar ohaeng={ohaeng} />
+                  {lacking.length > 0 && (
+                    <View style={s.lackingBox}>
+                      <Text style={s.lackingLabel}>부족한 오행</Text>
+                      <View style={s.lackingRow}>
+                        {lacking.map((oh) => (
+                          <View key={oh} style={[s.lackingBadge, { borderColor: OHAENG_COLOR[oh] || '#a78bfa' }]}>
+                            <Text style={[s.lackingText, { color: OHAENG_COLOR[oh] || '#a78bfa' }]}>{oh}</Text>
+                          </View>
+                        ))}
+                      </View>
+                      <Text style={s.lackingHint}>보완이 필요한 기운이에요</Text>
+                    </View>
+                  )}
+                  {lacking.length === 0 && hasOhaeng && (
+                    <Text style={s.balancedText}>✦ 오행이 균형 잡혀 있어요</Text>
+                  )}
                 </View>
               </>
             )}
@@ -235,6 +252,13 @@ const s = StyleSheet.create({
   barFill: { height: '100%', borderRadius: 4 },
   ohaengCount: { fontSize: 12, color: '#94a3b8', width: 16, textAlign: 'right' },
   descText: { color: '#c4b5fd', fontSize: 14, lineHeight: 22 },
+  lackingBox: { marginTop: 14, paddingTop: 14, borderTopWidth: 1, borderTopColor: '#2d2d4e' },
+  lackingLabel: { fontSize: 11, color: '#6b6b8e', marginBottom: 8 },
+  lackingRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap', marginBottom: 6 },
+  lackingBadge: { paddingHorizontal: 12, paddingVertical: 4, borderRadius: 20, borderWidth: 1, backgroundColor: '#0d0d1a' },
+  lackingText: { fontSize: 14, fontWeight: '700' },
+  lackingHint: { fontSize: 12, color: '#6b6b8e', marginTop: 2 },
+  balancedText: { fontSize: 13, color: '#4ade80', textAlign: 'center', marginTop: 12 },
   loadingBox: { alignItems: 'center', paddingVertical: 40, gap: 14 },
   loadingText: { color: '#94a3b8', fontSize: 14 },
   errorBox: { alignItems: 'center', paddingVertical: 30, gap: 16 },
