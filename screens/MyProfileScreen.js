@@ -203,13 +203,13 @@ export default function MyProfileScreen({ navigation, route }) {
           </>
         )}
 
-        {/* 궁합 보기 */}
+        {/* 매칭 찾기 */}
         <TouchableOpacity
-          style={[s.primaryBtn, loading && s.primaryBtnOff]}
-          onPress={() => navigation.navigate('Compatibility', { userInfo, sajuResult })}
+          style={[s.primaryBtn, (loading || !!error) && s.primaryBtnOff]}
+          onPress={() => navigation.navigate('매칭', { userInfo, sajuResult })}
           disabled={loading || !!error}
         >
-          <Text style={s.primaryBtnText}>궁합 보기 →</Text>
+          <Text style={s.primaryBtnText}>궁합 맞는 상대 찾기 →</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={s.ghostBtn} onPress={() => navigation.navigate('Onboarding')}>
