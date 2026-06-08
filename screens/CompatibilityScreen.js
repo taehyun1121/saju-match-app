@@ -13,6 +13,7 @@ const YEARS = range(1900, 2010).reverse();
 const MONTHS = range(1, 12);
 const DAYS = range(1, 31);
 const HOURS = range(0, 23);
+const MINUTES = Array.from({ length: 12 }, (_, i) => ({ label: String(i * 5).padStart(2, '0'), value: i * 5 }));
 
 function PickerModal({ visible, items, onSelect, onClose, title }) {
   return (
@@ -67,6 +68,7 @@ export default function CompatibilityScreen({ navigation, route }) {
   const [month, setMonth] = useState(null);
   const [day, setDay] = useState(null);
   const [hour, setHour] = useState(null);
+  const [minute, setMinute] = useState(0);
   const [hourUnknown, setHourUnknown] = useState(false);
   const [gender, setGender] = useState(null);
   const [picker, setPicker] = useState(null);
@@ -148,15 +150,22 @@ export default function CompatibilityScreen({ navigation, route }) {
           <SelectBox
             label="시"
             value={hourUnknown ? '모름' : hour}
-            placeholder="시간"
+            placeholder="시"
             onPress={() => setPicker('hour')}
+            disabled={hourUnknown}
+          />
+          <SelectBox
+            label="분"
+            value={hourUnknown ? '-' : String(minute).padStart(2, '0')}
+            placeholder="분"
+            onPress={() => setPicker('minute')}
             disabled={hourUnknown}
           />
           <View style={s.switchBox}>
             <Text style={s.switchLabel}>모름</Text>
             <Switch
               value={hourUnknown}
-              onValueChange={(v) => { setHourUnknown(v); setHour(null); }}
+              onValueChange={(v) => { setHourUnknown(v); setHour(null); setMinute(0); }}
               trackColor={{ false: '#2d2d4e', true: '#7c3aed' }}
               thumbColor={hourUnknown ? '#a78bfa' : '#6b6b8e'}
             />
@@ -252,6 +261,7 @@ export default function CompatibilityScreen({ navigation, route }) {
       <PickerModal visible={picker === 'month'} title="출생 월" items={MONTHS} onSelect={setMonth} onClose={() => setPicker(null)} />
       <PickerModal visible={picker === 'day'} title="출생 일" items={DAYS} onSelect={setDay} onClose={() => setPicker(null)} />
       <PickerModal visible={picker === 'hour'} title="태어난 시간 (0~23시)" items={HOURS} onSelect={setHour} onClose={() => setPicker(null)} />
+      <PickerModal visible={picker === 'minute'} title="태어난 분 (0~55분)" items={MINUTES} onSelect={setMinute} onClose={() => setPicker(null)} />
     </SafeAreaView>
   );
 }
