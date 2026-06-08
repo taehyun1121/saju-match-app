@@ -108,13 +108,18 @@ export default function MyProfileScreen({ navigation, route }) {
   const gender = userInfo.gender === 'male' ? '남성' : '여성';
   const birth = `${userInfo.year}.${String(userInfo.month).padStart(2, '0')}.${String(userInfo.day).padStart(2, '0')}${userInfo.hour !== null && userInfo.hour !== undefined ? ` ${userInfo.hour}시` : ''}`;
 
-  // 사주 4주 데이터 파싱 — API 응답: { ilgan, ilji, yeonji }
-  // top=天干(천간), bottom=地支(지지)
-  const pillars = sajuResult?.pillars || [
-    { hanja: '-', hangul: sajuResult?.yeonji || '?' },   // 년주: 연간 미제공, 연지만
-    { hanja: '-', hangul: '-' },                          // 월주: 미제공
-    { hanja: sajuResult?.ilgan || '?', hangul: sajuResult?.ilji || '?' }, // 일주
-    { hanja: '-', hangul: '-' },                          // 시주: 미제공
+  // 사주 4주 — API pillars: { yeonju, wolju, ilju, siju } 각 { gan, ji }
+  const p = sajuResult?.pillars;
+  const pillars = p ? [
+    { hanja: p.yeonju?.gan || '?', hangul: p.yeonju?.ji || '?' },
+    { hanja: p.wolju?.gan  || '?', hangul: p.wolju?.ji  || '?' },
+    { hanja: p.ilju?.gan   || '?', hangul: p.ilju?.ji   || '?' },
+    { hanja: p.siju?.gan   || '-', hangul: p.siju?.ji   || '시간 모름' },
+  ] : [
+    { hanja: '-', hangul: sajuResult?.yeonji || '?' },
+    { hanja: '-', hangul: '-' },
+    { hanja: sajuResult?.ilgan || '?', hangul: sajuResult?.ilji || '?' },
+    { hanja: '-', hangul: '-' },
   ];
 
   // 오행 분포 (백엔드 응답에 ohaeng 객체가 있을 경우)
