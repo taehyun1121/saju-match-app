@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import OnboardingScreen from './screens/OnboardingScreen';
 import MyProfileScreen from './screens/MyProfileScreen';
 import CompatibilityScreen from './screens/CompatibilityScreen';
@@ -29,6 +30,7 @@ function SajuStack() {
 
 export default function App() {
   return (
+    <SafeAreaProvider>
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
@@ -60,5 +62,6 @@ export default function App() {
         />
       </Tab.Navigator>
     </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
