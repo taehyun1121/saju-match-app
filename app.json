@@ -23,15 +23,6 @@
       "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-notifications",
-      [
-        "expo-location",
-        {
-          "locationAlwaysAndWhenInUsePermission": "위치 기반 매칭을 위해 위치 권한이 필요합니다."
-        }
-      ]
-    ],
     "extra": {
       "eas": {
         "projectId": "8a573fac-642e-4102-8e3a-a38bb7bfc00e"
